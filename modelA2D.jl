@@ -58,10 +58,10 @@ function ΔH(m², ϕ, ϕt, x)
 	Δϕ2= ϕt^2 - ϕold^2
 
 	## nearest neighbours
-	@inbounds Σnn = ϕ[ NNp[x[1]] , x[2]] + ϕ[x[1], NNp[x[2]]] + ϕ[x[1],x[2]]
-	@inbounds Σnn = Σnn + ϕ[ NNm[x[1]] ,x[2]] + ϕ[x[1],  NNm[x[2]]] + ϕ[x[1],x[2]]
+	@inbounds Σnn = ϕ[ NNp[x[1]] , x[2]] + ϕ[x[1], NNp[x[2]]] 
+	@inbounds Σnn = Σnn + ϕ[ NNm[x[1]] ,x[2]] + ϕ[x[1],  NNm[x[2]]] 
 
-	kinet_term =  3.0f0 * Δϕ2 - Δϕ * Σnn
+	kinet_term =  2.0f0 * Δϕ2 - Δϕ * Σnn
 	poten_term =  0.5f0 * m² * Δϕ2 + 0.25f0 * λ * (ϕt^4-ϕold^4)
 
 	kinet_term + poten_term
@@ -97,9 +97,10 @@ function sweep(m², ϕ, L)
 end
 
 function op(ϕ, L)
+	# this function is what you need to compute things we discussed today 
 	ϕk = fft(ϕ)
 	average = ϕk[1,1]/L^2
-	(real(average),ϕk[:,1,1])
+	(real(average),ϕk[:,1])
 end
 
 
